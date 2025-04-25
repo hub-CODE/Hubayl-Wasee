@@ -350,37 +350,38 @@
         }
     </style>
     <script>
-        const cursor = document.querySelector('.custom-cursor');
-        let mouseX = 0,
-            mouseY = 0;
-        let currentX = 0,
-            currentY = 0;
-        const delay = 0.2;
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursor = document.querySelector('.custom-cursor');
+            let mouseX = 0,
+                mouseY = 0;
+            let currentX = 0,
+                currentY = 0;
+            const delay = 0.2;
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            function animateCursor() {
+                currentX += (mouseX - currentX) * delay;
+                currentY += (mouseY - currentY) * delay;
+                cursor.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                requestAnimationFrame(animateCursor);
+            }
+
+            document.addEventListener('click', () => {
+                cursor.classList.remove('click-effect'); // reset
+                void cursor.offsetWidth; // force reflow
+                cursor.classList.add('click-effect');
+
+                setTimeout(() => {
+                    cursor.classList.remove('click-effect');
+                }, 400);
+            });
+
+            animateCursor();
         });
-
-        function animateCursor() {
-            currentX += (mouseX - currentX) * delay;
-            currentY += (mouseY - currentY) * delay;
-            cursor.style.transform = `translate(${currentX}px, ${currentY}px)`;
-            requestAnimationFrame(animateCursor);
-        }
-
-        document.addEventListener('click', () => {
-            cursor.classList.remove('click-effect'); // reset in case it's still animating
-            void cursor.offsetWidth; // force reflow (restarts animation)
-            cursor.classList.add('click-effect');
-
-            // Optionally remove class after animation ends (cleanup)
-            setTimeout(() => {
-                cursor.classList.remove('click-effect');
-            }, 400);
-        });
-
-        animateCursor();
     </script>
     <header>
         <nav id="navbar"
